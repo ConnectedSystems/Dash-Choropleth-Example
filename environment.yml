@@ -1,0 +1,111 @@
+name: choro-example
+channels:
+- conda-forge
+- defaults
+dependencies:
+- backports=1.0
+- backports.functools_lru_cache=1.5
+- backports_abc=0.5
+- boost=1.66.0
+- boost-cpp=1.66.0
+- ca-certificates=2018.4.16
+- certifi=2018.4.16
+- click=6.7
+- click-plugins=1.0.3
+- cligj=0.4.0
+- curl=7.59.0
+- cycler=0.10.0
+- descartes=1.1.0
+- enum34=1.1.6
+- expat=2.2.5
+- fiona=1.7.11
+- freetype=2.8.1
+- freexl=1.0.5
+- functools32=3.2.3.2
+- futures=3.2.0
+- gdal=2.2.4
+- geopandas=0.3.0
+- geos=3.6.2
+- geotiff=1.4.2
+- hdf4=4.2.13
+- hdf5=1.10.1
+- icu=58.2
+- jpeg=9b
+- kealib=1.4.7
+- kiwisolver=1.0.1
+- krb5=1.14.6
+- libgdal=2.2.4
+- libiconv=1.15
+- libnetcdf=4.4.1.1
+- libpng=1.6.34
+- libpq=9.6.3
+- libspatialindex=1.8.5
+- libspatialite=4.3.0a
+- libssh2=1.8.0
+- libtiff=4.0.9
+- libxml2=2.9.5
+- matplotlib=2.2.2
+- mkl_fft=1.0.2
+- munch=2.3.1
+- openjpeg=2.3.0
+- openssl=1.0.2o
+- pandas=0.22.0
+- pip=9.0.3
+- proj4=4.9.3
+- psycopg2=2.7.4
+- pyparsing=2.2.0
+- pyproj=1.9.5.1
+- pyqt=5.6.0
+- pysal=1.14.3
+- python=2.7.14
+- python-dateutil=2.7.2
+- pytz=2018.4
+- qt=5.6.2
+- rtree=0.8.3
+- setuptools=39.1.0
+- shapely=1.6.4
+- singledispatch=3.4.0.3
+- sip=4.18
+- six=1.11.0
+- sqlalchemy=1.2.7
+- sqlite=3.20.1
+- tornado=5.0.2
+- vc=9
+- vs2008_runtime=9.0.30729.6161
+- vs2015_runtime=14.0.25420
+- wheel=0.31.0
+- wincertstore=0.2
+- xerces-c=3.2.0
+- xz=5.2.3
+- zlib=1.2.11
+- icc_rt=2017.0.4
+- intel-openmp=2018.0.0
+- mkl=2018.0.2
+- numpy=1.14.2
+- scipy=1.0.1
+- pip:
+  - backports-abc==0.5
+  - backports.functools-lru-cache==1.5
+  - chardet==3.0.4
+  - dash==0.21.0
+  - dash-core-components==0.22.1
+  - dash-html-components==0.10.0
+  - dash-renderer==0.12.1
+  - decorator==4.3.0
+  - flask==1.0
+  - flask-compress==1.4.0
+  - idna==2.6
+  - ipython-genutils==0.2.0
+  - itsdangerous==0.24
+  - jinja2==2.10
+  - jsonschema==2.6.0
+  - jupyter-core==4.4.0
+  - markupsafe==1.0
+  - mkl-fft==1.0.2
+  - nbformat==4.4.0
+  - plotly==2.5.1
+  - randomcolor==0.4.4.5
+  - requests==2.18.4
+  - traitlets==4.3.2
+  - urllib3==1.22
+  - werkzeug==0.14.1

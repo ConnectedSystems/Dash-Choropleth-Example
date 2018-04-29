@@ -132,8 +132,6 @@ def update_map(overlay_choice):
                 continue
             # End if
 
-            print("overlay", overlay, overlay_color[overlay])
-
             layers.append({
                 'name': overlay,
                 'source': overlay_options[overlay],

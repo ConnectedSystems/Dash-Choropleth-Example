@@ -74,7 +74,7 @@ opts = [{'label': lng.title(), 'value': lng.lower()} for lng in langs]
 opts.append(all_opt)
 
 map_layout = {
-    'title': 'Portland LEP Attendance',
+    'title': 'Portland LEP',
     'data': [{
         'lon': lep_df['LON'],
         'lat': lep_df['LAT'],
@@ -83,7 +83,7 @@ map_layout = {
             'opacity': 0.0,
         },
         'type': 'scattermapbox',
-        'name': 'Portland Schools',
+        'name': 'Portland LEP',
         'text': lep_df['HOVER'],
         'hoverinfo': 'text',
         'showlegend': True,

@@ -50,5 +50,6 @@ Shapefile sourced from:
 https://gis-pdx.opendata.arcgis.com/datasets/a0e5ed95749d4181abfb2a7a2c98d7ef_121
 
 
-Note that there is currently a bug in dash which breaks interactions after second layer change.
+~~Note that there is currently a bug in dash which breaks interactions after second layer change.~~
+[Fixed 10 July 2018](https://github.com/plotly/dash-core-components/pull/228)
 See https://github.com/plotly/dash/issues/223 for more info.

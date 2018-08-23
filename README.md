@@ -8,14 +8,19 @@ Requested by eddy_oj at https://community.plot.ly/t/create-your-own-choropleth-m
 
 [(Ana/Mini)conda](https://conda.io/docs/user-guide/install/download.html) is used to manage my different project environments.
 
-The same environment used to create this example can be created using
+The same (conda) environment used to develop this example can be created using
 
-`conda env create -n choro-example -f environment.yml`
+**Windows:**
 
-This will install all necessary python packages for the example.
-Note that environment creation has not been tested on \*nix systems.
+`conda env create -n choro-example -f win_environment.yml`
 
-Inspect the `environment.yml` file for the list of packages used.
+**\*nix platforms**
+
+`conda env create -n choro-example -f nix_environment.yml`
+
+This will install all necessary python packages for the example. Thanks to [Steve98654](https://github.com/steve98654) for providing the \*nix environment file.
+
+Inspect the `[win\nix]_environment.yml` file for the list of packages used.
 These can be manually installed (e.g. via `pip`) if the use of `conda` is undesirable.
 
 Once finished, the environment may be removed:

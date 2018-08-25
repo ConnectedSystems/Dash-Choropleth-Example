@@ -7,10 +7,6 @@ Example using data on Limited English Proficiency in Portland.
 Shapefile taken from:
 
 https://gis-pdx.opendata.arcgis.com/datasets/a0e5ed95749d4181abfb2a7a2c98d7ef_121
-
-
-Note that there is currently a bug in dash which breaks interactions after second layer change.
-See https://github.com/plotly/dash/issues/223 for more info.
 """
 
 import json
@@ -19,7 +15,9 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import geopandas as gpd
-import randomcolor
+
+import matplotlib
+import matplotlib.cm as cm
 
 mapbox_key = None
 if not mapbox_key:
@@ -43,7 +41,7 @@ lat = lep_df['LAT'][0]
 # Get list of languages given in the shapefile
 langs = [lng for lng in lep_df.columns
          if lng.istitle() and
-         lng not in ['Id', 'Id2', 'Total_Pop_'] and
+         lng not in ['Id', 'Id2', 'Total_Pop_', 'Geography'] and
          'Shape' not in lng]
 
 # Generate stats for example
@@ -53,26 +51,34 @@ lep_df['NUM_LEP'] = lep_df[langs].sum(axis=1)
 lep_df['HOVER'] = 'Geography: ' + lep_df.Geography + \
     '<br /> Num. LEP:' + lep_df.NUM_LEP.astype(str)
 
-# Create overlay data for each language option
-overlay_data = {
-    lng.lower(): json.loads(lep_df.loc[lep_df[lng] > 0, :].to_json())
-    for lng in langs
-}
+mcolors = matplotlib.colors
 
-# Generate colors for each language
-seed_val = 10  # Set a seed value to generate the same colors between runs
-color_generator = randomcolor.RandomColor(seed=seed_val)
-colors = color_generator.generate(count=len(langs))
 
-# Setup overlay colors (one for each layer)
-overlay_color = {
-    lng.lower(): shade
-    for lng, shade in zip(langs, colors)
-}
+def set_overlay_colors(dataset):
+    """Create overlay colors based on values
+
+    :param dataset: gpd.Series, array of values to map colors to
+
+    :returns: dict, hex color value for each language or index value
+    """
+    minima = dataset.min()
+    maxima = dataset.max()
+    norm = mcolors.Normalize(vmin=minima, vmax=maxima, clip=True)
+    mapper = cm.ScalarMappable(norm=norm, cmap=cm.inferno)
+    colors = [mcolors.to_hex(mapper.to_rgba(v)) for v in dataset]
+
+    overlay_color = {
+        idx: shade
+        for idx, shade in zip(dataset.index, colors)
+    }
+
+    return overlay_color
+# End set_overlay_colors()
+
 
 # Create layer options that get displayed to the user in the dropdown
-all_opt = {'label': 'All', 'value': 'all'}
-opts = [{'label': lng.title(), 'value': lng.lower()} for lng in langs]
+all_opt = {'label': 'All', 'value': 'All'}
+opts = [{'label': lng.title(), 'value': lng} for lng in langs]
 opts.append(all_opt)
 
 # template for map
@@ -115,7 +121,7 @@ app.layout = html.Div([
     dcc.Dropdown(
         id='overlay-choice',
         options=opts,
-        value='all'
+        value='All'
     ),
     html.Div([
         dcc.Graph(id='map-display'),
@@ -128,39 +134,32 @@ app.layout = html.Div([
     [dash.dependencies.Input('overlay-choice', 'value')])
 def update_map(overlay_choice):
 
-    if overlay_choice == 'all':
-        layers = []
-        for overlay in overlay_data:
-            if overlay == 'all':
-                continue
-            # End if
-
-            layers.append({
-                'name': overlay,
-                'source': overlay_data[overlay],
-                'sourcetype': 'geojson',
-                'type': 'fill',
-                'opacity': 0.3,
-                'color': overlay_color[overlay]
-            })
-        # End for
+    tmp = map_layout.copy()
+    if overlay_choice == 'All':
+        dataset = lep_df
+        colors = set_overlay_colors(lep_df.NUM_LEP)
+        tmp['data'][0]['text'] = lep_df['HOVER']
     else:
-        chosen_dataset = overlay_data.get(overlay_choice, None)
-        if overlay_data is None:
-            raise RuntimeError("Invalid overlay option")
-        # End if
+        dataset = lep_df.loc[lep_df[overlay_choice] > 0, :]
 
-        layers = [{
-            'name': overlay_choice,
-            'source': chosen_dataset,
-            'sourcetype': 'geojson',
-            'type': 'fill',
-            'opacity': 1.0,
-            'color': overlay_color[overlay_choice]
-        }]
+        colors = set_overlay_colors(dataset[overlay_choice])
+
+        # Update hovertext display
+        hovertext = lep_df['Geography'].str.cat(
+                        lep_df[overlay_choice].astype(str), sep=': ')
+        tmp['data'][0]['text'] = hovertext
     # End if
 
-    tmp = map_layout
+    # Create a layer for each region colored by LEP value
+    layers = [{
+        'name': overlay_choice,
+        'source': json.loads(dataset.loc[dataset.index == i, :].to_json()),
+        'sourcetype': 'geojson',
+        'type': 'fill',
+        'opacity': 1.0,
+        'color': colors[i]
+    } for i in dataset.index]
+
     tmp['layout']['mapbox']['layers'] = layers
 
     return tmp
